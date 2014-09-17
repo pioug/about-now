@@ -1,0 +1,181 @@
+body {
+  -webkit-user-select: none;
+  background: #263238;
+  color: rgba(255, 255, 255, .9);
+  cursor: default;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1,
+h2 {
+  font-weight: 500;
+}
+
+h3 {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255 , .6) 50%);
+  background-position: 0 24px;
+  background-repeat: repeat-x;
+  background-size: 2px 2px;
+  font-weight: 300;
+  line-height: 1.4em;
+}
+
+ul {
+  list-style: none;
+  padding: 0
+}
+
+dt {
+  font-weight: 500;
+}
+
+dd {
+  font-weight: 100;
+  margin-bottom: 1em;
+  margin-left: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+gmail {
+  font-weight: 100;
+  margin: 2em 0;
+  opacity: 0;
+  text-align: center;
+}
+
+.gmail-counter-new {
+  color: #f50057;
+  font-weight: 500;
+}
+
+.gmail-visible {
+  -webkit-animation: fade-in .2s ease-in .2s forwards;
+}
+
+@-webkit-keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+calendar {
+  -webkit-animation: zoom-in .2s ease-out .2s forwards;
+  margin: auto;
+  opacity: 0;
+  padding-bottom: 5em;
+  text-align: center;
+}
+
+@-webkit-keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.agenda {
+  margin: 2em 0;
+  position: relative;
+}
+
+.events-transition.ng-hide-add,
+.events-transition.ng-hide-remove {
+  opacity: 1;
+  transition: all .3s ease-out .1s;
+}
+
+.events-transition.ng-hide {
+  opacity: 0;
+  transition: all .3s ease-out;
+}
+
+.events {
+  left: 100%;
+  margin-left: 3em;
+  opacity: 1;
+  padding-right: 3em;
+  position: absolute;
+  text-align: left;
+  top: 1em;
+}
+
+.calendar,
+.events-list {
+  width: 20em;
+}
+
+.days {
+  margin: 0;
+}
+
+.days-number,
+.days-word {
+  box-sizing: border-box;
+  display: inline-table;
+  text-align: center;
+}
+
+.days-word {
+  background: #37474f;
+  font-size: .8em;
+  margin-bottom: .4em;
+  padding: .75em 0;
+  text-transform: uppercase;
+  width: calc(100% / 7);
+}
+
+.gmail-button,
+.days-number {
+  font-weight: 100;
+  margin: .15em .1em;
+  padding: 0.75em;
+  transition: all .2s ease-in;
+  width: calc(100% / 7 - .2em);
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0);
+}
+
+.gmail-button:hover,
+.days-number:hover {
+  color: rgba(255, 255, 255, 1);
+  background: #546e7a;
+}
+
+.gmail-button:active {
+  background: #90a4ae;
+  transition: none;
+}
+
+.days-number-today.days-number-today {
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 1px 1px #f50057;
+}
+
+.days-number-out {
+  color: #455a64;
+}
+
+.days-number-event {
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, .2);
+  cursor: pointer;
+}
+
+.days-number-active {
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 1);
+}

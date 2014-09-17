@@ -1,0 +1,40 @@
+<!-- <ul class="months">
+  <li class="months-word" ng-repeat="m in Months">{{ m | date: 'MMM' }}</li>
+</ul> -->
+<h2>{{ clock | date:'shortTime' }}</h2>
+<h1>{{ today | date:'longDate' }}</h1>
+<section class="agenda">
+  <article class="calendar">
+    <ul class="days">
+      <li class="days-word" ng-repeat="d in Days | limitTo: 7">{{ d | date: 'EEE' }}</li>
+      <li class="days-number"
+        title="{{ setEvents(d) }}"
+        ng-repeat="d in Days"
+        ng-click="hasEvents(d) && setActiveEvents(d)"
+        ng-class="{
+          'days-number-today': isToday(d),
+          'days-number-out': today.getMonth() !== d.getMonth(),
+          'days-number-event': hasEvents(d),
+          'days-number-active': isActiveDay(d)
+        }">
+        {{ d | date: 'dd' }}
+      </li>
+    </ul>
+  </article>
+  <article class="events events-transition" ng-show="activeEventsOdd.length > 0 && odd">
+    <h3 ng-if="activeDayOdd && isToday(activeDayOdd)">Today</h3>
+    <h3 ng-if="activeDayOdd && !isToday(activeDayOdd)">{{ activeDayOdd | date:'longDate' }}</h3>
+    <dl class="events-list">
+      <dt ng-repeat-start="event in activeEventsOdd">{{ event.startDate | date:'shortTime' }}</dt>
+      <dd ng-repeat-end><a href="{{ event.url }}">{{ event.title }}</a></dd>
+    </dl>
+  </article>
+  <article class="events events-transition" ng-show="activeEventsEven.length > 0 && !odd">
+    <h3 ng-if="activeDayEven && isToday(activeDayEven)">Today</h3>
+    <h3 ng-if="activeDayEven && !isToday(activeDayEven)">{{ activeDayEven | date:'longDate' }}</h3>
+    <dl class="events-list">
+      <dt ng-repeat-start="event in activeEventsEven">{{ event.startDate | date:'shortTime' }}</dt>
+      <dd ng-repeat-end><a href="{{ event.url }}">{{ event.title }}</a></dd>
+    </dl>
+  </article>
+</section>

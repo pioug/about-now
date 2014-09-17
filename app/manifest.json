@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "about:now",
+  "version": "0.0.1",
+  "description": "Minimalist new tab page with calendar widget.",
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "https://mail.google.com/mail/u/0/feed/atom/",
+    "https://www.google.com/calendar/feeds/default/allcalendars/full"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "icons": {
+    "48": "icon48.png"
+  }
+}
