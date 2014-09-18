@@ -10,7 +10,7 @@ angular
       }
     }, 1000);
   }])
-  .directive('calendar', ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
+  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', function($rootScope, $http, $q, $filter) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
@@ -85,10 +85,14 @@ angular
           for (var i = 0; i < entries.length; i++) {
             calendars.push(_.zipObject(['title', 'url'], [titles[i].innerText, urls[i].getAttribute('src')]));
           }
+          var y = scope.today.getFullYear();
+          var m = scope.today.getMonth();
+          var firstDay = $filter('date')(new Date(y, m, 1), 'yyyy-MM-dd');
+          var lastDay = $filter('date')(new Date(y, m + 1, 0), 'yyyy-MM-dd');
           var promises = calendars.map(function(calendar) {
             return $http({
               method: 'GET',
-              url: calendar.url
+              url: calendar.url + '?start-min=' + firstDay + '&start-max=' + lastDay + '&max-results=300'
             });
           });
           return $q.all(promises)
