@@ -55,6 +55,8 @@ gmail {
   margin: 2em 0;
   opacity: 0;
   text-align: center;
+  transition: all .3s ease-out .2s;
+  visibility: hidden;
 }
 
 .gmail-counter-new {
@@ -63,19 +65,15 @@ gmail {
 }
 
 .gmail-visible {
-  -webkit-animation: fade-in .2s ease-in .2s forwards;
-}
-
-@-webkit-keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  opacity: 1;
+  visibility: visible;
 }
 
 calendar {
   -webkit-animation: zoom-in .2s ease-out .2s forwards;
   margin: auto;
   opacity: 0;
-  padding-bottom: 5em;
+  padding-bottom: 6em;
   text-align: center;
 }
 
@@ -83,10 +81,12 @@ calendar {
   from {
     opacity: 0;
     transform: scale(.9);
+    visibility: hidden;
   }
   to {
     opacity: 1;
     transform: scale(1);
+    visibility: visible;
   }
 }
 
@@ -98,22 +98,23 @@ calendar {
 .events-transition.ng-hide-add,
 .events-transition.ng-hide-remove {
   opacity: 1;
-  transition: all .3s ease-out .1s;
+  transition-delay: .1s;
+  visibility: visible;
 }
 
 .events-transition.ng-hide {
   opacity: 0;
-  transition: all .3s ease-out;
+  visibility: hidden;
 }
 
 .events {
   left: 100%;
   margin-left: 3em;
-  opacity: 1;
   padding-right: 3em;
   position: absolute;
   text-align: left;
   top: 1em;
+  transition: all .3s ease-out;
 }
 
 .calendar,
@@ -146,7 +147,7 @@ calendar {
   font-weight: 100;
   margin: .15em .1em;
   padding: 0.75em;
-  transition: all .2s ease-in;
+  transition: all .3s ease-in;
   width: calc(100% / 7 - .2em);
   box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0);
 }
