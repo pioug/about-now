@@ -1,6 +1,7 @@
 angular
-  .module('CalendarExt', ['ngAnimate'])
+  .module('CalendarExt', ['ngAnimate', 'ngResource'])
   .run(['$rootScope', '$interval', '$document', function ($rootScope, $interval, $document) {
+
     $rootScope.today = new Date();
     $rootScope.clock = new Date();
     $interval(function() {
@@ -9,8 +10,35 @@ angular
         $rootScope.today = new Date();
       }
     }, 1000);
+
   }])
-  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', function($rootScope, $http, $q, $filter) {
+  .factory('Events', ['$resource', '$rootScope', 'Token', function ($resource, $rootScope, Token) {
+
+    var y = $rootScope.today.getFullYear();
+    var m = $rootScope.today.getMonth();
+
+    return $resource('https://www.googleapis.com/calendar/v3/:url', {}, {
+      getCalendars: {
+        method: 'GET',
+        url: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+        headers: { Authorization: 'Bearer ' + Token }
+      },
+      getEventsFromCalendar: {
+        method: 'GET',
+        url: 'https://www.googleapis.com/calendar/v3/calendars/:calendarId/events',
+        params: {
+          timeMax: (function() {
+            return new Date(y, m + 1, 0);
+          })(),
+          timeMin: (function() {
+            return new Date(y, m, 1);
+          })()
+        },
+        headers: { Authorization: 'Bearer ' + Token }
+      },
+    });
+  }])
+  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'Events', function($rootScope, $http, $q, $filter, Events) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
@@ -57,7 +85,7 @@ angular
           var day = new Date(d);
           day.setHours(0, 0, 0, 0);
           return _.some(scope.events, function(event) {
-            var eventDate = new Date(event.startDate);
+            var eventDate = new Date(event.start.dateTime || event.start.date);
             eventDate.setHours(0,0,0,0);
             return eventDate.getTime() === day.getTime();
           });
@@ -70,48 +98,21 @@ angular
           day.setHours(0, 0, 0, 0);
           scope.activeDay = scope['activeDay' + odd] = day;
           scope['activeEvents' + odd] = _.filter(scope.events, function(event) {
-            var eventDate = new Date(event.startDate);
+            var eventDate = new Date(event.start.dateTime || event.start.date);
             eventDate.setHours(0,0,0,0);
             return eventDate.getTime() === day.getTime();
           });
         };
 
-        $http.get('https://www.google.com/calendar/feeds/default/allcalendars/full').success(function(data) {
-          var xml = angular.element(data);
-          var entries = xml.find('entry');
-          var titles = entries.find('title');
-          var urls = entries.find('content');
-          var calendars = [];
-          for (var i = 0; i < entries.length; i++) {
-            calendars.push(_.zipObject(['title', 'url'], [titles[i].innerText, urls[i].getAttribute('src')]));
-          }
-          var y = scope.today.getFullYear();
-          var m = scope.today.getMonth();
-          var firstDay = $filter('date')(new Date(y, m, 1), 'yyyy-MM-dd');
-          var lastDay = $filter('date')(new Date(y, m + 1, 0), 'yyyy-MM-dd');
-          var promises = calendars.map(function(calendar) {
-            return $http({
-              method: 'GET',
-              url: calendar.url + '?start-min=' + firstDay + '&start-max=' + lastDay + '&max-results=300'
-            });
+        Events.getCalendars().$promise.then(function(calendars) {
+          var promises = calendars.items.map(function(calendar) {
+             return Events.getEventsFromCalendar({ calendarId: calendar.id }).$promise;
           });
-          return $q.all(promises)
-          .then(function(results) {
-            scope.events = [];
-            results
-              .map(function(result) { return angular.element(result.data); })
-              .map(function(data) { return data.find('entry'); })
-              .forEach(function(calendar) {
-                angular.forEach(calendar, function(entry) {
-                  var when = entry.getElementsByTagName('gd:when')[0];
-                  when = when && when.getAttribute('starttime');
-                  scope.events.push(_.zipObject(['title', 'url', 'startDate'], [
-                    entry.getElementsByTagName('title')[0].innerText,
-                    entry.getElementsByTagName('link')[0].href,
-                    when
-                  ]));
-                });
-              });
+          $q.all(promises).then(function(events) {
+            scope.events = _.reduce(events, function(list, events) {
+              list = list.items || list;
+              return list.concat(events.items);
+            });
             scope.setActiveEvents($rootScope.today);
           });
         });
@@ -139,3 +140,10 @@ angular
       templateUrl: 'gmail.html'
     };
   }]);
+
+chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+  angular.element(document).ready(function() {
+    angular.module('CalendarExt').constant('Token', token);
+    angular.bootstrap(document, ['CalendarExt']);
+  });
+});

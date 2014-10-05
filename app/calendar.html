@@ -25,16 +25,16 @@
     <h3 ng-if="activeDayOdd && isToday(activeDayOdd)">Today</h3>
     <h3 ng-if="activeDayOdd && !isToday(activeDayOdd)">{{ activeDayOdd | date:'longDate' }}</h3>
     <dl class="events-list">
-      <dt ng-repeat-start="event in activeEventsOdd">{{ event.startDate | date:'shortTime' }}</dt>
-      <dd ng-repeat-end><a href="{{ event.url }}">{{ event.title }}</a></dd>
+      <dt ng-repeat-start="event in activeEventsOdd">{{ event.start.dateTime || event.start.date | date:'shortTime' }}</dt>
+      <dd ng-repeat-end><a href="{{ event.htmlLink }}">{{ event.summary }}</a></dd>
     </dl>
   </article>
   <article class="events events-transition" ng-show="activeEventsEven.length > 0 && !odd">
     <h3 ng-if="activeDayEven && isToday(activeDayEven)">Today</h3>
     <h3 ng-if="activeDayEven && !isToday(activeDayEven)">{{ activeDayEven | date:'longDate' }}</h3>
     <dl class="events-list">
-      <dt ng-repeat-start="event in activeEventsEven">{{ event.startDate | date:'shortTime' }}</dt>
-      <dd ng-repeat-end><a href="{{ event.url }}">{{ event.title }}</a></dd>
+      <dt ng-repeat-start="event in activeEventsEven">{{ event.start.dateTime || event.start.date | date:'shortTime' }}</dt>
+      <dd ng-repeat-end><a href="{{ event.htmlLink }}">{{ event.summary }}</a></dd>
     </dl>
   </article>
 </section>
