@@ -1,5 +1,20 @@
 angular
   .module('CalendarExt', ['ngAnimate', 'ngResource'])
+  .config(['$httpProvider', 'Token', function ($httpProvider, Token) {
+    $httpProvider.interceptors.push(function() {
+      return {
+        request: function(config) {
+          config.headers.Authorization = 'Bearer ' + Token;
+          return config;
+        },
+        responseError: function(error) {
+          if (error.status === 401) {
+            chrome.identity.removeCachedAuthToken({ 'token': Token }, function() {});
+          }
+        }
+      };
+    });
+  }])
   .run(['$rootScope', '$interval', '$document', function ($rootScope, $interval, $document) {
 
     $rootScope.today = new Date();
@@ -12,7 +27,7 @@ angular
     }, 1000);
 
   }])
-  .factory('GoogleAPI', ['$resource', '$rootScope', 'Token', function ($resource, $rootScope, Token) {
+  .factory('GoogleAPI', ['$resource', '$rootScope', function ($resource, $rootScope) {
 
     var y = $rootScope.today.getFullYear();
     var m = $rootScope.today.getMonth();
@@ -21,14 +36,6 @@ angular
       getCalendars: {
         method: 'GET',
         url: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-        headers: { Authorization: 'Bearer ' + Token },
-        interceptor: {
-          responseError: function(error) {
-            if (error.status === 401) {
-              chrome.identity.removeCachedAuthToken({ 'token': Token }, function() {});
-            }
-          }
-        }
       },
       getEventsFromCalendar: {
         method: 'GET',
@@ -40,16 +47,14 @@ angular
           timeMin: (function() {
             return new Date(y, m, 1);
           })()
-        },
-        headers: { Authorization: 'Bearer ' + Token }
+        }
       },
       getUnreadMails: {
         method: 'GET',
         url: 'https://www.googleapis.com/gmail/v1/users/me/messages',
         params: {
           labelIds: ['UNREAD', 'INBOX']
-        },
-        headers: { Authorization: 'Bearer ' + Token }
+        }
       }
     });
 
