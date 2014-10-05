@@ -7,8 +7,7 @@
     "newtab": "index.html"
   },
   "permissions": [
-    "identity",
-    "https://mail.google.com/mail/u/0/feed/atom/"
+    "identity"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
@@ -18,7 +17,8 @@
   "oauth2": {
     "client_id": "450310158844-e4egi40g9aue94o56c0671q43audjnro.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/calendar.readonly"
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/gmail.readonly"
     ]
   }
 }

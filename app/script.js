@@ -12,7 +12,7 @@ angular
     }, 1000);
 
   }])
-  .factory('Events', ['$resource', '$rootScope', 'Token', function ($resource, $rootScope, Token) {
+  .factory('GoogleAPI', ['$resource', '$rootScope', 'Token', function ($resource, $rootScope, Token) {
 
     var y = $rootScope.today.getFullYear();
     var m = $rootScope.today.getMonth();
@@ -43,9 +43,18 @@ angular
         },
         headers: { Authorization: 'Bearer ' + Token }
       },
+      getUnreadMails: {
+        method: 'GET',
+        url: 'https://www.googleapis.com/gmail/v1/users/me/messages',
+        params: {
+          labelIds: ['UNREAD', 'INBOX']
+        },
+        headers: { Authorization: 'Bearer ' + Token }
+      }
     });
+
   }])
-  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'Events', function($rootScope, $http, $q, $filter, Events) {
+  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'GoogleAPI', function($rootScope, $http, $q, $filter, GoogleAPI) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
@@ -111,9 +120,9 @@ angular
           });
         };
 
-        Events.getCalendars().$promise.then(function(calendars) {
+        GoogleAPI.getCalendars().$promise.then(function(calendars) {
           var promises = calendars.items.map(function(calendar) {
-             return Events.getEventsFromCalendar({ calendarId: calendar.id }).$promise;
+             return GoogleAPI.getEventsFromCalendar({ calendarId: calendar.id }).$promise;
           });
           $q.all(promises).then(function(events) {
             scope.events = _.reduce(events, function(list, events) {
@@ -127,22 +136,15 @@ angular
       templateUrl: 'calendar.html'
     };
   }])
-  .directive('gmail', ['$http', function($http) {
+  .directive('gmail', ['GoogleAPI', function(GoogleAPI) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
-        $http.get('https://mail.google.com/mail/u/0/feed/atom/')
-          .success(function(data) {
-            var xml = angular.element(data);
-            scope.unreadCount = xml.find('fullcount')[0].innerText;
-            element[0].className += ' gmail-visible';
-            scope.gmail = true;
-          })
-          .error(function() {
-            element[0].className += ' gmail-visible';
-            scope.gmail = false;
-            scope.$digest();
-          });
+        GoogleAPI.getUnreadMails().$promise.then(function(mails) {
+          element[0].className += ' gmail-visible';
+          scope.unreadCount = mails.resultSizeEstimate;
+          scope.gmail = true;
+        });
       },
       templateUrl: 'gmail.html'
     };
