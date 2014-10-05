@@ -21,7 +21,14 @@ angular
       getCalendars: {
         method: 'GET',
         url: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-        headers: { Authorization: 'Bearer ' + Token }
+        headers: { Authorization: 'Bearer ' + Token },
+        interceptor: {
+          responseError: function(error) {
+            if (error.status === 401) {
+              chrome.identity.removeCachedAuthToken({ 'token': Token }, function() {});
+            }
+          }
+        }
       },
       getEventsFromCalendar: {
         method: 'GET',
