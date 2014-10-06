@@ -125,6 +125,10 @@ angular
           });
         };
 
+        scope.startAttribute = function(event) {
+          return event.start.dateTime || event.start.date;
+        };
+
         GoogleAPI.getCalendars().$promise.then(function(calendars) {
           var promises = calendars.items.map(function(calendar) {
              return GoogleAPI.getEventsFromCalendar({ calendarId: calendar.id }).$promise;
