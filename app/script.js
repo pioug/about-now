@@ -15,7 +15,27 @@ angular
       };
     });
   }])
-  .run(['$rootScope', '$interval', '$document', function ($rootScope, $interval, $document) {
+  .service('ChromeCache', ['$q', function($q) {
+    return {
+      set: function(key, value) {
+        var deferred = $q.defer();
+        var obj = {};
+        obj[key] = value;
+        chrome.storage.local.set(obj, function() {
+          deferred.resolve();
+        });
+        return deferred.promise;
+      },
+      get: function(key) {
+        var deferred = $q.defer();
+        chrome.storage.local.get(key, function(items) {
+          deferred.resolve(items);
+        });
+        return deferred.promise;
+      }
+    };
+  }])
+  .run(['ChromeCache', '$rootScope', '$interval', '$document', function (ChromeCache, $rootScope, $interval, $document) {
 
     $rootScope.today = new Date();
     $rootScope.clock = new Date();
@@ -59,7 +79,7 @@ angular
     });
 
   }])
-  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'GoogleAPI', function($rootScope, $http, $q, $filter, GoogleAPI) {
+  .directive('calendar', ['ChromeCache', '$rootScope', '$http', '$q', '$filter', 'GoogleAPI', 'ChromeCache', function(ChromeCache, $rootScope, $http, $q, $filter, GoogleAPI, ChromeCache) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
@@ -129,6 +149,10 @@ angular
           return event.start.dateTime || event.start.date;
         };
 
+        ChromeCache.get('events').then(function(cache) {
+          scope.events = cache.events;
+        });
+
         GoogleAPI.getCalendars().$promise.then(function(calendars) {
           var promises = calendars.items.map(function(calendar) {
              return GoogleAPI.getEventsFromCalendar({ calendarId: calendar.id }).$promise;
@@ -139,6 +163,7 @@ angular
               return list.concat(events.items);
             });
             scope.setActiveEvents($rootScope.today);
+            ChromeCache.set('events', angular.copy(scope.events));
           });
         });
       },
