@@ -162,7 +162,9 @@ angular
               list = list.items || list;
               return list.concat(events.items);
             });
-            scope.setActiveEvents($rootScope.today);
+            if (!scope.activeDay) {
+              scope.setActiveEvents($rootScope.today);
+            }
             ChromeCache.set('events', angular.copy(scope.events));
           });
         });
