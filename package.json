@@ -1,0 +1,9 @@
+{
+  "name": "about-now",
+  "devDependencies": {
+    "gulp": "latest",
+    "del": "latest",
+    "gulp-usemin": "latest",
+    "gulp-zip": "latest"
+  }
+}
