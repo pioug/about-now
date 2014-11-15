@@ -1,10 +1,8 @@
-<!-- <ul class="months">
-  <li class="months-word" ng-repeat="m in Months">{{ m | date: 'MMM' }}</li>
-</ul> -->
-<h2>{{ clock | date:'shortTime' }}</h2>
-<h1>{{ today | date:'longDate' }}</h1>
+<h1>{{ clock | date:'HH:mm' }}</h1>
+<h2>{{ today | date:'EEEE, MMMM d' }}</h2>
 <section class="agenda">
   <article class="calendar">
+    <!-- <header class="month">{{ today | date:'MMMM' }}</header> -->
     <ul class="days">
       <li class="days-word" ng-repeat="d in Days | limitTo: 7">{{ d | date: 'EEE' }}</li>
       <li class="days-number"

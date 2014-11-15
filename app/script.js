@@ -79,7 +79,7 @@ angular
     });
 
   }])
-  .directive('calendar', ['ChromeCache', '$rootScope', '$http', '$q', '$filter', 'GoogleAPI', 'ChromeCache', function(ChromeCache, $rootScope, $http, $q, $filter, GoogleAPI, ChromeCache) {
+  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'GoogleAPI', 'ChromeCache', function($rootScope, $http, $q, $filter, GoogleAPI, ChromeCache) {
     return {
       restrict: 'E',
       link: function(scope, element, attrs) {
@@ -186,7 +186,7 @@ angular
     };
   }]);
 
-chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+chrome.identity.getAuthToken({ interactive: true }, function(token) {
   angular.element(document).ready(function() {
     angular.module('CalendarExt').constant('Token', token);
     angular.bootstrap(document, ['CalendarExt']);
