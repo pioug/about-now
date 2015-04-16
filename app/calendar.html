@@ -1,38 +1,44 @@
-<h1>{{ clock | date:'HH:mm' }}</h1>
-<h2>{{ today | date:'EEEE, MMMM d' }}</h2>
 <section class="agenda">
-  <article class="calendar">
-    <!-- <header class="month">{{ today | date:'MMMM' }}</header> -->
-    <ul class="days">
-      <li class="days-word" ng-repeat="d in Days | limitTo: 7">{{ d | date: 'EEE' }}</li>
-      <li class="days-number"
-        title="{{ setEvents(d) }}"
+  <div class="calendar">
+    <div class="thead">
+      <div class="th" ng-repeat="d in Days | limitTo: 7" ng-bind="d | date: 'EEE'"></div>
+    </div>
+    <div class="tbody">
+      <div class="td"
         ng-repeat="d in Days"
-        ng-click="hasEvents(d) && setActiveEvents(d)"
+        ng-click="(hasEvents(d) || isToday(d)) && setActiveEvents(d)"
         ng-class="{
-          'days-number-today': isToday(d),
-          'days-number-out': today.getMonth() !== d.getMonth(),
-          'days-number-event': hasEvents(d),
-          'days-number-active': isActiveDay(d)
-        }">
-        {{ d | date: 'dd' }}
-      </li>
-    </ul>
-  </article>
-  <article class="events events-transition" ng-show="activeEventsOdd.length > 0 && odd">
-    <h3 ng-if="activeDayOdd && isToday(activeDayOdd)">Today</h3>
-    <h3 ng-if="activeDayOdd && !isToday(activeDayOdd)">{{ activeDayOdd | date:'longDate' }}</h3>
-    <dl class="events-list">
-      <dt ng-repeat-start="event in activeEventsOdd | orderBy: startAttribute">{{ event.start.dateTime | date:'shortTime' }}</dt>
-      <dd ng-repeat-end><a href="{{ event.htmlLink }}">{{ event.summary }}</a></dd>
-    </dl>
-  </article>
-  <article class="events events-transition" ng-show="activeEventsEven.length > 0 && !odd">
-    <h3 ng-if="activeDayEven && isToday(activeDayEven)">Today</h3>
-    <h3 ng-if="activeDayEven && !isToday(activeDayEven)">{{ activeDayEven | date:'longDate' }}</h3>
-    <dl class="events-list">
-      <dt ng-repeat-start="event in activeEventsEven | orderBy: startAttribute">{{ event.start.dateTime | date:'shortTime' }}</dt>
-      <dd ng-repeat-end><a href="{{ event.htmlLink }}">{{ event.summary }}</a></dd>
-    </dl>
-  </article>
+          'calendar-day-today': isToday(d),
+          'calendar-day-out': today.getMonth() !== d.getMonth(),
+          'calendar-day-event': hasEvents(d),
+          'calendar-day-active': isActiveDay(d)
+        }"> {{ d | date: 'd' }}</div>
+    </div>
+  </div>
+  <div class="calendar-events" ng-show="odd">
+    <span class="calendar-events-day" ng-if="activeDayOdd && isToday(activeDayOdd)">Today</span>
+    <span class="calendar-events-day" ng-if="activeDayOdd && !isToday(activeDayOdd)">{{ activeDayOdd | date:'longDate' }}</span>
+    <div class="calendar-events-list">
+      <div class="calendar-event" ng-repeat="event in activeEventsOdd | orderBy: startAttribute">
+        <span class="calendar-event-time" ng-if="event.start.dateTime">{{ event.start.dateTime | date:'shortTime' }}</span>
+        <span class="calendar-event-name"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
+      </div>
+      <div class="calendar-event" ng-if="activeEventsOdd.length === 0">
+        <span class="calendar-event-name"><em>No events</em></span>
+      </div>
+    </div>
+  </div>
+  <div class="calendar-events" ng-show="!odd">
+    <span class="calendar-events-day" ng-if="activeDayEven && isToday(activeDayEven)">Today</span>
+    <span class="calendar-events-day" ng-if="activeDayEven && !isToday(activeDayEven)">{{ activeDayEven | date:'longDate' }}</span>
+    <div class="calendar-events-list">
+      <div class="calendar-event" ng-repeat="event in activeEventsEven | orderBy: startAttribute">
+        <span class="calendar-event-time" ng-if="event.start.dateTime">{{ event.start.dateTime | date:'shortTime' }}</span>
+        <span class="calendar-event-name"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
+      </div>
+      <div class="calendar-event" ng-if="activeEventsEven.length === 0">
+        <span class="calendar-event-name"><em>No events</em></span>
+      </div>
+    </div>
+  </div>
 </section>
