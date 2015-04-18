@@ -7,13 +7,19 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="bower_components/lodash/lodash.js"></script>
   <script src="script.js"></script>
   <!-- endbuild -->
 </head>
 <body>
-  <main>
-    <gmail></gmail>
+  <header>
+    <div class="container">
+      <span class="header-1">Today</span>
+      <span class="header-2" ng-bind="clock | date:'HH:mm'"></span>
+      <span class="header-3" ng-bind="today | date:'EEEE, MMMM d'"></span>
+    </div>
+  </header>
+  <main class="container">
     <calendar></calendar>
   </main>
 </body>

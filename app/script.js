@@ -82,6 +82,7 @@ angular
   .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'GoogleAPI', 'ChromeCache', function($rootScope, $http, $q, $filter, GoogleAPI, ChromeCache) {
     return {
       restrict: 'E',
+      replace: true,
       link: function(scope, element, attrs) {
         $rootScope.$watch('today', function() {
           scope.Months = (function() {
@@ -94,6 +95,7 @@ angular
           })();
           scope.Days = (function() {
             var days = [];
+            var weeks = [];
             var now = _.clone($rootScope.today);
             var prevMonth = new Date(_.clone($rootScope.today).setDate(0));
             var nextMonth = new Date(_.clone($rootScope.today).setDate(32));
@@ -105,7 +107,7 @@ angular
               days.push(new Date(now.setDate(i)));
             }
             now.setDate(currentMonth.getDate() + 1);
-            for (i = now.getDay(); i > 0 && i <= 6; i++) {
+            for (i = now.getDay(); i > 0 && i <= 13; i++) {
               days.push(new Date(now));
               now.setDate(now.getDate() + 1);
             }
@@ -151,6 +153,9 @@ angular
 
         ChromeCache.get('events').then(function(cache) {
           scope.events = cache.events;
+          if (!scope.activeDay) {
+            scope.setActiveEvents($rootScope.today);
+          }
         });
 
         GoogleAPI.getCalendars().$promise.then(function(calendars) {
