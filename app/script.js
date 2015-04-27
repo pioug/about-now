@@ -62,10 +62,10 @@ angular
         url: 'https://www.googleapis.com/calendar/v3/calendars/:calendarId/events',
         params: {
           timeMax: (function() {
-            return new Date(y, m + 1, 0);
+            return new Date(y, m + 1, 15);
           })(),
           timeMin: (function() {
-            return new Date(y, m, 1);
+            return new Date(y, m - 1, 15);
           })()
         }
       },
