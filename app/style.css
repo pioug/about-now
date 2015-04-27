@@ -174,7 +174,7 @@ main {
   color: rgba(0, 0, 0, 0.26);
 }
 
-.calendar-day-today {
+.calendar-day-today.calendar-day-today {
   border-radius: 50%;
   cursor: pointer;
 }
