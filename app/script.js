@@ -95,7 +95,6 @@ angular
           })();
           scope.Days = (function() {
             var days = [];
-            var weeks = [];
             var now = _.clone($rootScope.today);
             var prevMonth = new Date(_.clone($rootScope.today).setDate(0));
             var nextMonth = new Date(_.clone($rootScope.today).setDate(32));
@@ -107,7 +106,7 @@ angular
               days.push(new Date(now.setDate(i)));
             }
             now.setDate(currentMonth.getDate() + 1);
-            for (i = now.getDay(); i > 0 && i <= 13; i++) {
+            for (i = now.getDay(); i > 0 && days.length < 42; i++) {
               days.push(new Date(now));
               now.setDate(now.getDate() + 1);
             }
