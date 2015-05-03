@@ -151,15 +151,18 @@ main {
 
 .calendar-event-time {
   color: rgba(0, 0, 0, 0.54);
-  margin-right: 1rem;
-  min-width: 70px;
-  text-align: right;
+  margin-right: 0.8rem;
+  max-width: 70px;
 }
 
 .calendar-event-name {
-  max-width: calc(100% - 70px - 1rem);
+  max-width: calc(100% - 70px - 0.8rem);
   text-align: left;
   word-wrap: break-word;
+}
+
+.calendar-event-name-no-time {
+  max-width: 100%;
 }
 
 .calendar-event-name a {
