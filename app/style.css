@@ -97,6 +97,7 @@ main {
 .td {
   display: inline-block;
   font-size: 16px;
+  overflow: hidden;
   line-height: 38px;
   margin: 1px;
   padding-top: 2px;
