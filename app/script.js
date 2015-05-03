@@ -1,5 +1,5 @@
 angular
-  .module('CalendarExt', ['ngAnimate', 'ngResource'])
+  .module('CalendarExt', ['ngResource'])
   .config(['$httpProvider', 'Token', function ($httpProvider, Token) {
     $httpProvider.interceptors.push(function() {
       return {
@@ -79,7 +79,7 @@ angular
     });
 
   }])
-  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', 'GoogleAPI', 'ChromeCache', function($rootScope, $http, $q, $filter, GoogleAPI, ChromeCache) {
+  .directive('calendar', ['$rootScope', '$http', '$q', '$filter', '$timeout', 'GoogleAPI', 'ChromeCache', function($rootScope, $http, $q, $filter, $timeout, GoogleAPI, ChromeCache) {
     return {
       restrict: 'E',
       replace: true,
@@ -149,6 +149,12 @@ angular
         scope.startAttribute = function(event) {
           return event.start.dateTime || event.start.date;
         };
+
+        $timeout(function() {
+          Waves.attach('.calendar-day-event', 'waves-light');
+          Waves.attach('.calendar-day-today', 'waves-circle waves-light');
+          Waves.init();
+        });
 
         ChromeCache.get('events').then(function(cache) {
           scope.events = cache.events;

@@ -21,7 +21,7 @@
     <div class="calendar-events-list">
       <div class="calendar-event" ng-repeat="event in activeEventsOdd | orderBy: startAttribute">
         <span class="calendar-event-time" ng-if="event.start.dateTime">{{ event.start.dateTime | date:'shortTime' }}</span>
-        <span class="calendar-event-name"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
+        <span class="calendar-event-name" ng-class="{ 'calendar-event-name-no-time': !event.start.dateTime }"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
       </div>
       <div class="calendar-event" ng-if="activeEventsOdd.length === 0">
         <span class="calendar-event-name"><em>No events</em></span>
@@ -34,7 +34,7 @@
     <div class="calendar-events-list">
       <div class="calendar-event" ng-repeat="event in activeEventsEven | orderBy: startAttribute">
         <span class="calendar-event-time" ng-if="event.start.dateTime">{{ event.start.dateTime | date:'shortTime' }}</span>
-        <span class="calendar-event-name"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
+        <span class="calendar-event-name" ng-class="{ 'calendar-event-name-no-time': !event.start.dateTime }"><a href="{{ event.htmlLink }}">{{ event.summary }}</a></span>
       </div>
       <div class="calendar-event" ng-if="activeEventsEven.length === 0">
         <span class="calendar-event-name"><em>No events</em></span>
