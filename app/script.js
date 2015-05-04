@@ -152,7 +152,7 @@ angular
 
         $timeout(function() {
           Waves.attach('.calendar-day-event', 'waves-light');
-          Waves.attach('.calendar-day-today', 'waves-circle waves-light');
+          Waves.attach('.calendar-day-today', 'waves-light');
           Waves.init();
         });
 
