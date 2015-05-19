@@ -128,8 +128,8 @@ main {
   border-left: 5px solid #90CAF9;
   border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-  padding: 0.8rem 1rem;
-  width: 310px;
+  padding: 13px 24px 11px 24px;
+  width: 342px;
 }
 
 .calendar-event {
@@ -145,7 +145,7 @@ main {
 .calendar-event-name {
   display: inline-block;
   font-size: 16px;
-  line-height: 1.2;
+  line-height: 1.5;
   vertical-align: top;
 }
 
